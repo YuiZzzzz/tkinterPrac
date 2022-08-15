@@ -190,12 +190,12 @@ class RootPage(object):
         else:
             self.ind = int(cur_data[0])
 
-        # 删除前弹窗提示, 询问是否删除
-        result = askyesno(title='delet', message='是否删除物种'+cur_data[1]+'?')
-        # 选择为'是', result变量为True时
-        if result:
-            csv_delete(self.ind, DATA_PATH)     # 从csv文件中删除数据
-            self.refresh()                      # 刷新root界面
+            # 删除前弹窗提示, 询问是否删除
+            result = askyesno(title='delet', message='是否删除物种'+cur_data[1]+'?')
+            # 选择为'是', result变量为True时
+            if result:
+                csv_delete(self.ind, DATA_PATH)     # 从csv文件中删除数据
+                self.refresh()                      # 刷新root界面
 
 
 
