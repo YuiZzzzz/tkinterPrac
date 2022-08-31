@@ -1,4 +1,3 @@
-
 from tkinter import *
 from login import LoginPage
 
@@ -8,7 +7,8 @@ root = Tk()
 root.title('上帝造物管理系统')
 
 # 创建登录窗口, 具体构造方法见login.py
-LoginPage(root)
+a = LoginPage(root)
+
 
 # 开始运行窗口
 root.mainloop()

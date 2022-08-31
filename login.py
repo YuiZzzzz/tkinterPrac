@@ -31,7 +31,7 @@ class LoginPage(object):
         self.page = Frame(self.root)
         self.page.pack()
 
-        # 所有页面所需组件
+        # 所有t页面所需组件
         # 使用grid方法布局, 方便对齐
         Label(self.page).grid(row=0, stick=W)
 

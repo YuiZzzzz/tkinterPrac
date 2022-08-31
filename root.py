@@ -6,6 +6,8 @@ from tkinter.messagebox import *
 from PIL import Image               # 读取和保存图片
 from csvio import *
 
+import pandas
+
 # 默认管理系统数据文件路径
 DATA_PATH = 'data/data_list.csv'
 # 默认的用户列表数据路径
@@ -82,7 +84,7 @@ class RootPage(object):
         Button(self.frame_op, text='删除', command=self.delete).grid(row=0, column=1, stick=W, pady=10)
         Button(self.frame_op, text='修改', command=self.modify).grid(row=0, column=2, stick=W, pady=10)
         Button(self.frame_op, text='查询', command=self.search).grid(row=0, column=3, stick=W, pady=10)
-        # Button(self.frame_op, text='刷新', command=self.refresh).grid(row=0, column=4, stick=W, pady=10)
+        Button(self.frame_op, text='刷新', command=self.refresh).grid(row=0, column=4, stick=W, pady=10)
 
 
     # 刷新当前界面
@@ -91,7 +93,7 @@ class RootPage(object):
         self.frame_op.destroy()
         self.createPage()           # 重新调用创建管理界面
 
-    # 监听并返回TreeView中被选中的项目
+    # # 监听并返回TreeView中被选中的项目
     def item_select(self, event):
         for select in self.tree.selection():
             return self.tree.item(select, "values")
@@ -214,41 +216,48 @@ class RootPage(object):
 
         # 如果未选中任何数据行, 弹出提示
         if not cur_data:
-            showinfo(title='提示', message='请选择要删除的物种')
+            showinfo(title='提示', message='请选择要修改的物种')
 
         # 获得选中的数据行的index值, 从数据行中读取并赋给当前name值
         else:
             self.ind = int(cur_data[0])
             self.name = StringVar()
             self.name.set(cur_data[1])
+            self.lifespan = StringVar()
+            self.lifespan.set(cur_data[2])
+            self.food = StringVar()
+            self.food.set(cur_data[3])
+            self.hobby = StringVar()
+            self.hobby.set(cur_data[4])
+            self.design = StringVar()
+            self.design.set(cur_data[5])
 
+            mode = 'modify'
+            self.top = Toplevel(width=500, height=800)      # 生成一个置顶窗口
+            self.top.title(mode)                            # 设置窗口标题
 
-        mode = 'modify'
-        self.top = Toplevel(width=500, height=800)      # 生成一个置顶窗口
-        self.top.title(mode)                            # 设置窗口标题
+            # 所有页面所需组件
+            # 使用grid方法布局, 方便对齐
+            Label(self.top).grid(row=0, stick=W)
+            Label(self.top, text='物种: ').grid(row=1, stick=W, pady=10)
+            Entry(self.top, textvariable=self.name).grid(row=1, column=1, stick=E)
+            Label(self.top, text='平均寿命: ').grid(row=2, stick=W, pady=10)
+            Entry(self.top, textvariable=self.lifespan).grid(row=2, column=1, stick=E)
+            Label(self.top, text='食物: ').grid(row=3, stick=W, pady=10)
+            Entry(self.top, textvariable=self.food).grid(row=3, column=1, stick=E)
+            Label(self.top, text='喜好: ').grid(row=4, stick=W, pady=10)
+            Entry(self.top, textvariable=self.hobby).grid(row=4, column=1, stick=E)
+            Label(self.top, text='叫声: ').grid(row=5, stick=W, pady=10)
+            Entry(self.top, textvariable=self.language).grid(row=5, column=1, stick=E)
 
-        # 所有页面所需组件
-        # 使用grid方法布局, 方便对齐
-        Label(self.top).grid(row=0, stick=W)
-        Label(self.top, text='物种: ').grid(row=1, stick=W, pady=10)
-        Entry(self.top, textvariable=self.name).grid(row=1, column=1, stick=E)
-        Label(self.top, text='平均寿命: ').grid(row=2, stick=W, pady=10)
-        Entry(self.top, textvariable=self.lifespan).grid(row=2, column=1, stick=E)
-        Label(self.top, text='食物: ').grid(row=3, stick=W, pady=10)
-        Entry(self.top, textvariable=self.food).grid(row=3, column=1, stick=E)
-        Label(self.top, text='喜好: ').grid(row=4, stick=W, pady=10)
-        Entry(self.top, textvariable=self.hobby).grid(row=4, column=1, stick=E)
-        Label(self.top, text='叫声: ').grid(row=5, stick=W, pady=10)
-        Entry(self.top, textvariable=self.language).grid(row=5, column=1, stick=E)
+            # 需要接收文件, 按钮显示'设计图待上传', 若已上传, 按钮显示文件名
+            Label(self.top, text='设计图: ').grid(row=6, stick=W, pady=10)
+            self.design.set('设计图待上传')
+            # 点击按钮执行upload函数
+            Button(self.top, textvariable=self.design, command=self.upload).grid(row=6, column=1, stick=E)
 
-        # 需要接收文件, 按钮显示'设计图待上传', 若已上传, 按钮显示文件名
-        Label(self.top, text='设计图: ').grid(row=6, stick=W, pady=10)
-        self.design.set('设计图待上传')
-        # 点击按钮执行upload函数
-        Button(self.top, textvariable=self.design, command=self.upload).grid(row=6, column=1, stick=E)
-
-        # 点击按钮执行, 修改数据并刷新
-        Button(self.top, text='确认', command=self.modify_n_refresh).grid(row=7, stick=E, pady=10)
+            # 点击按钮执行, 修改数据并刷新
+            Button(self.top, text='确认', command=self.modify_n_refresh).grid(row=7, stick=E, pady=10)
 
 
     # 修改数据并刷新

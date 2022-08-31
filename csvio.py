@@ -14,7 +14,7 @@ def csv_write(row_data, path):
 
     data.append(row_data)
 
-    with open(path, 'w') as f:
+    with open(path, 'w', newline='/n') as f:
         writer = csv.writer(f)
         writer.writerows(data)
 
@@ -25,7 +25,7 @@ def csv_modify(row_data, ind, path):
 
     data[ind] = row_data
 
-    with open(path, 'w') as f:
+    with open(path, 'w', newline='/n') as f:
         writer = csv.writer(f)
         writer.writerows(data)
 
@@ -38,7 +38,7 @@ def csv_delete(ind, path):
     for i, row in enumerate(data):
         row[0] = i
 
-    with open(path, 'w') as f:
+    with open(path, 'w', newline='/n') as f:
         writer = csv.writer(f)
         writer.writerows(data)
 
